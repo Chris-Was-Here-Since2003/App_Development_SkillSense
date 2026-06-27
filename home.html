@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillSense – Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================================================
+       TOP NAVIGATION BAR
+       ================================================ -->
+  <nav class="navbar" role="navigation" aria-label="Main Navigation">
+
+    <!-- Left: Logo -->
+    <div class="nav-left">
+      <a href="home.html" class="logo" aria-label="SkillSense Home">Skill<span>Sense</span></a>
+    </div>
+
+    <!-- Center: Nav Links -->
+    <div class="nav-center">
+      <a href="home.html" class="nav-link active">Home</a>
+      <a href="#jobs" class="nav-link">Jobs</a>
+      <a href="#applications" class="nav-link">Applications</a>
+    </div>
+
+    <!-- Right: Notifications + Avatar -->
+    <div class="nav-right">
+      <button class="notif-btn" aria-label="Notifications">
+        🔔
+        <span class="notif-badge" aria-label="3 notifications">3</span>
+      </button>
+      <div class="avatar" title="Hans Dorego" aria-label="User profile">HD</div>
+    </div>
+
+  </nav>
+
+  <!-- ================================================
+       MAIN DASHBOARD CONTENT
+       ================================================ -->
+  <main class="dashboard-main">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section" aria-label="Welcome Banner">
+      <div class="hero-text">
+        <h1>Welcome Back, Hans! 👋</h1>
+        <p>Find your next career opportunity with AI-powered recommendations tailored to your skills and experience.</p>
+        <div class="hero-buttons">
+          <button class="btn-hero-primary" onclick="document.getElementById('resume-section').scrollIntoView({behavior:'smooth'})">
+            📄 Upload Resume
+          </button>
+          <button class="btn-hero-outline" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
+            Browse Jobs
+          </button>
+        </div>
+      </div>
+      <div class="hero-illustration" aria-hidden="true">💼</div>
+    </section>
+
+    <!-- SEARCH SECTION -->
+    <section class="search-section" aria-label="Job Search">
+      <div class="search-row">
+
+        <div class="search-input-wrap">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input type="text" class="search-input" id="job-search"
+            placeholder="Search jobs, skills, or companies..."
+            aria-label="Search jobs, skills, or companies" />
+        </div>
+
+        <select class="search-select" aria-label="Filter by location">
+          <option value="">📍 Location</option>
+          <option>Cebu City</option>
+          <option>Manila</option>
+          <option>Davao</option>
+          <option>Remote</option>
+        </select>
+
+        <select class="search-select" aria-label="Filter by job type">
+          <option value="">💼 Job Type</option>
+          <option>Full-time</option>
+          <option>Part-time</option>
+          <option>Freelance</option>
+          <option>Internship</option>
+        </select>
+
+        <select class="search-select" aria-label="Filter by experience level">
+          <option value="">📊 Experience</option>
+          <option>Entry Level</option>
+          <option>Mid Level</option>
+          <option>Senior Level</option>
+        </select>
+
+        <button class="btn-search" onclick="handleSearch()">Search</button>
+
+      </div>
+    </section>
+
+    <!-- AI RECOMMENDED JOBS SECTION -->
+    <section class="ai-jobs-section" id="jobs" aria-label="AI Recommended Jobs">
+      <div class="section-header">
+        <h2>🤖 Recommended For You</h2>
+        <a href="#" class="see-all-link">See all →</a>
+      </div>
+
+      <div class="jobs-grid">
+
+        <!-- Card 1 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="company-logo" aria-hidden="true">G</div>
+            <span class="match-badge">92% Match</span>
+          </div>
+          <div>
+            <div class="job-title">Data Analyst</div>
+            <div class="company-name">Google Philippines</div>
+          </div>
+          <div class="job-location">📍 Taguig, Metro Manila</div>
+          <div class="match-bar-wrap">
+            <div class="match-bar-label">
+              <span>Skills Match</span>
+              <span>92%</span>
+            </div>
+            <div class="match-bar-track">
+              <div class="match-bar-fill" data-width="92"></div>
+            </div>
+          </div>
+          <div class="skills-row">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">Data Analysis</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-view">View Details</button>
+            <button class="btn-apply">Apply Now</button>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="company-logo" aria-hidden="true">M</div>
+            <span class="match-badge">88% Match</span>
+          </div>
+          <div>
+            <div class="job-title">Backend Developer</div>
+            <div class="company-name">Accenture PH</div>
+          </div>
+          <div class="job-location">📍 Cebu City</div>
+          <div class="match-bar-wrap">
+            <div class="match-bar-label">
+              <span>Skills Match</span>
+              <span>88%</span>
+            </div>
+            <div class="match-bar-track">
+              <div class="match-bar-fill" data-width="88"></div>
+            </div>
+          </div>
+          <div class="skills-row">
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">REST API</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-view">View Details</button>
+            <button class="btn-apply">Apply Now</button>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="company-logo" aria-hidden="true">S</div>
+            <span class="match-badge">85% Match</span>
+          </div>
+          <div>
+            <div class="job-title">Software Engineer</div>
+            <div class="company-name">Symph Co.</div>
+          </div>
+          <div class="job-location">📍 Cebu City</div>
+          <div class="match-bar-wrap">
+            <div class="match-bar-label">
+              <span>Skills Match</span>
+              <span>85%</span>
+            </div>
+            <div class="match-bar-track">
+              <div class="match-bar-fill" data-width="85"></div>
+            </div>
+          </div>
+          <div class="skills-row">
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">Git</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-view">View Details</button>
+            <button class="btn-apply">Apply Now</button>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="company-logo" aria-hidden="true">I</div>
+            <span class="match-badge">81% Match</span>
+          </div>
+          <div>
+            <div class="job-title">IT Support Specialist</div>
+            <div class="company-name">IBM Philippines</div>
+          </div>
+          <div class="job-location">📍 Quezon City</div>
+          <div class="match-bar-wrap">
+            <div class="match-bar-label">
+              <span>Skills Match</span>
+              <span>81%</span>
+            </div>
+            <div class="match-bar-track">
+              <div class="match-bar-fill" data-width="81"></div>
+            </div>
+          </div>
+          <div class="skills-row">
+            <span class="skill-tag">Networking</span>
+            <span class="skill-tag">Linux</span>
+            <span class="skill-tag">Troubleshooting</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-view">View Details</button>
+            <button class="btn-apply">Apply Now</button>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="company-logo" aria-hidden="true">C</div>
+            <span class="match-badge">78% Match</span>
+          </div>
+          <div>
+            <div class="job-title">Cloud Engineer</div>
+            <div class="company-name">Cloudstaff PH</div>
+          </div>
+          <div class="job-location">📍 Remote</div>
+          <div class="match-bar-wrap">
+            <div class="match-bar-label">
+              <span>Skills Match</span>
+              <span>78%</span>
+            </div>
+            <div class="match-bar-track">
+              <div class="match-bar-fill" data-width="78"></div>
+            </div>
+          </div>
+          <div class="skills-row">
+            <span class="skill-tag">AWS</span>
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">CI/CD</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-view">View Details</button>
+            <button class="btn-apply">Apply Now</button>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="company-logo" aria-hidden="true">T</div>
+            <span class="match-badge">75% Match</span>
+          </div>
+          <div>
+            <div class="job-title">QA Engineer</div>
+            <div class="company-name">TechSource Inc.</div>
+          </div>
+          <div class="job-location">📍 Makati, Metro Manila</div>
+          <div class="match-bar-wrap">
+            <div class="match-bar-label">
+              <span>Skills Match</span>
+              <span>75%</span>
+            </div>
+            <div class="match-bar-track">
+              <div class="match-bar-fill" data-width="75"></div>
+            </div>
+          </div>
+          <div class="skills-row">
+            <span class="skill-tag">Testing</span>
+            <span class="skill-tag">Selenium</span>
+            <span class="skill-tag">Jira</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-view">View Details</button>
+            <button class="btn-apply">Apply Now</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- RECENTLY POSTED JOBS -->
+    <section class="recent-jobs-section" aria-label="Recently Posted Jobs">
+      <div class="section-header">
+        <h2>🕐 Recently Posted</h2>
+        <a href="#" class="see-all-link">See all →</a>
+      </div>
+
+      <div class="recent-jobs-grid">
+
+        <article class="recent-job-card">
+          <span class="job-type-badge">Full-time</span>
+          <div class="job-title">Frontend Developer</div>
+          <div class="company-name">Nexus Digital PH</div>
+          <div class="job-meta">
+            <span>📍 Cebu City</span>
+          </div>
+          <div class="salary">₱35,000 – ₱55,000</div>
+          <div class="posted-date">Posted 2 hours ago</div>
+        </article>
+
+        <article class="recent-job-card">
+          <span class="job-type-badge">Full-time</span>
+          <div class="job-title">UI/UX Designer</div>
+          <div class="company-name">CreativeHub Co.</div>
+          <div class="job-meta">
+            <span>📍 Remote</span>
+          </div>
+          <div class="salary">₱30,000 – ₱50,000</div>
+          <div class="posted-date">Posted 5 hours ago</div>
+        </article>
+
+        <article class="recent-job-card">
+          <span class="job-type-badge">Hybrid</span>
+          <div class="job-title">Data Analyst</div>
+          <div class="company-name">Analytics Corp</div>
+          <div class="job-meta">
+            <span>📍 Manila</span>
+          </div>
+          <div class="salary">₱40,000 – ₱60,000</div>
+          <div class="posted-date">Posted 8 hours ago</div>
+        </article>
+
+        <article class="recent-job-card">
+          <span class="job-type-badge">Full-time</span>
+          <div class="job-title">Backend Developer</div>
+          <div class="company-name">DevForce Solutions</div>
+          <div class="job-meta">
+            <span>📍 Davao City</span>
+          </div>
+          <div class="salary">₱38,000 – ₱58,000</div>
+          <div class="posted-date">Posted 1 day ago</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- BOTTOM GRID: CAREER INSIGHTS + RESUME STATUS -->
+    <div class="bottom-grid" id="applications">
+
+      <!-- CAREER INSIGHTS -->
+      <section class="insights-section" aria-label="Career Insights">
+        <h2>📊 Career Insights</h2>
+        <div class="insights-cards">
+
+          <div class="insight-card">
+            <div class="insight-icon">📋</div>
+            <div class="insight-value">12</div>
+            <div class="insight-label">Applications Submitted</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-icon">📅</div>
+            <div class="insight-value">4</div>
+            <div class="insight-label">Interview Invites</div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-icon">👤</div>
+            <div class="insight-value">85%</div>
+            <div class="insight-label">Profile Completion</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RESUME STATUS -->
+      <section class="resume-section" id="resume-section" aria-label="Resume Status">
+        <h2>📄 Resume Status</h2>
+
+        <div class="resume-card">
+          <div class="resume-status-row">
+            <div class="resume-icon" aria-hidden="true">📄</div>
+            <div class="resume-status-text">
+              <h4>Resume Uploaded</h4>
+              <div class="status-check">✓ Resume Analyzed by AI</div>
+            </div>
+          </div>
+
+          <div class="detected-skills-label">Skills Detected:</div>
+          <div class="detected-skills">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">Communication</span>
+            <span class="skill-tag">Git</span>
+          </div>
+
+          <button class="btn-update-resume">Update Resume</button>
+        </div>
+
+      </section>
+
+    </div><!-- end bottom-grid -->
+
+  </main>
+
+  <!-- ================================================
+       FOOTER
+       ================================================ -->
+  <footer class="home-footer" aria-label="Site Footer">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <div class="logo">SkillSense</div>
+        <p>AI-powered job matching that connects the right talent with the right opportunity.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About SkillSense</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Report a Bug</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 SkillSense — Group Tung Tung Sahur | [CS/IT] 3105N App Development
+    </div>
+  </footer>
+
+  <!-- ================================================
+       JAVASCRIPT — DASHBOARD INTERACTIONS
+       ================================================ -->
+  <script>
+    /* ---- Animate match score bars on page load ---- */
+    document.addEventListener('DOMContentLoaded', function () {
+      const bars = document.querySelectorAll('.match-bar-fill');
+      // Small delay so the animation is visible
+      setTimeout(() => {
+        bars.forEach(bar => {
+          const target = bar.getAttribute('data-width');
+          bar.style.width = target + '%';
+        });
+      }, 300);
+    });
+
+    /* ---- Search handler ---- */
+    function handleSearch() {
+      const query = document.getElementById('job-search').value.trim();
+      if (!query) {
+        document.getElementById('job-search').focus();
+        return;
+      }
+      // Scroll to jobs section as feedback
+      document.getElementById('jobs').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ---- Allow Enter on search input ---- */
+    document.getElementById('job-search').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') handleSearch();
+    });
+
+    /* ---- Apply / View buttons feedback ---- */
+    document.querySelectorAll('.btn-apply').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const title = this.closest('.job-card').querySelector('.job-title').textContent;
+        alert('Application submitted for: ' + title);
+      });
+    });
+
+    document.querySelectorAll('.btn-view').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const title = this.closest('.job-card').querySelector('.job-title').textContent;
+        alert('Viewing details for: ' + title);
+      });
+    });
+
+    /* ---- Update Resume button ---- */
+    document.querySelector('.btn-update-resume').addEventListener('click', function () {
+      alert('Resume upload feature coming soon!');
+    });
+  </script>
+
+</body>
+</html>
