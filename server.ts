@@ -426,9 +426,9 @@ app.post("/api/analyze-resume", async (req, res) => {
       2. Predict multiple alternative career pathways (minimum of 2, maximum of 5, e.g. Technical Specialist track, Management/Leadership track, Product/Strategy hybrid track, and Entrepreneurship/Consulting track). Each pathway must have a clear title, description of its focus, and exactly 3 sequential future roles over 1-2 years (short term), 3-4 years (mid term), and 5+ years (long term). Describe each role, transition difficulty, market demand, and skills to acquire.
       3. Categorize key technical and soft skills into a skills heat map with explicit proficiency ratings (1 to 100), descriptions of strength, and a detailed justification of why that specific score (1 to 100) was given based on their years of experience, projects, or level of responsibility shown in the resume.
       4. Compute a competitiveness score (0 to 100) for three specific epochs:
-         - 5 Years Ago (circa 2021)
-         - Today (2026)
-         - 5 Years in the Future (circa 2031)
+         - 5 Years Ago (Today - 5 YEARS)
+         - Today 
+         - 5 Years in the Future (Today + 5 YEARS)
          In corporate labor economics context, analyze technological disruption, AI growth, automation risk, and stack shifts for each epoch and provide context.
       5. Perform a Skill Gap Analysis identifying missing/emerging skills with highly customized, practical recommendations. For each missing or critical skill gap, provide detailed 'learningRecommendations' detailing:
          - Curated courses or learning platforms (such as freeCodeCamp, Codecademy, Coursera, or YouTube playlists).
