@@ -1,0 +1,6 @@
+{
+  "name": "Resume Career Analyzer",
+  "description": "An interactive, AI-powered dashboard that parses your resume, maps your career progression, visualizes a skills heat map, analyzes skill gaps, and calculates competitiveness across three historical and future timeframes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
