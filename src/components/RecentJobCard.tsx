@@ -3,16 +3,12 @@ import { Job } from "../types";
 
 interface RecentJobCardProps {
   job: Job;
-  isApplied: boolean;
   onViewDetails: (job: Job) => void;
-  onApply: (jobId: string, jobTitle: string) => void;
 }
 
 export const RecentJobCard: React.FC<RecentJobCardProps> = ({
   job,
-  isApplied,
   onViewDetails,
-  onApply,
 }) => {
   return (
     <article className="recent-job-card bg-white rounded-2xl p-5 border border-[#E5E7EB] hover:border-blue-100 transition-all flex flex-col justify-between">
@@ -32,18 +28,12 @@ export const RecentJobCard: React.FC<RecentJobCardProps> = ({
         <div className="salary text-xs font-extrabold text-emerald-600 mb-1">{job.salary}</div>
         <div className="posted-date text-[10px] text-slate-400">Posted {job.postedDate}</div>
         
-        <div className="flex gap-2 mt-3">
+        <div className="mt-3">
           <button 
             onClick={() => onViewDetails(job)}
-            className="w-1/2 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-bold rounded-lg border border-slate-200 transition-colors"
+            className="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg border-0 transition-colors text-center"
           >
-            Detail
-          </button>
-          <button 
-            onClick={() => onApply(job.id, job.title)}
-            className="w-1/2 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg border-0 transition-colors"
-          >
-            {isApplied ? "Applied" : "Apply"}
+            View Details
           </button>
         </div>
       </div>

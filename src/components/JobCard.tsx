@@ -3,18 +3,14 @@ import { Job, ResumeAnalysisResult } from "../types";
 
 interface JobCardProps {
   job: Job;
-  isApplied: boolean;
   analysisResult: ResumeAnalysisResult | null;
   onViewDetails: (job: Job) => void;
-  onApply: (jobId: string, jobTitle: string) => void;
 }
 
 export const JobCard: React.FC<JobCardProps> = ({
   job,
-  isApplied,
   analysisResult,
   onViewDetails,
-  onApply,
 }) => {
   // Calculate dynamic match percentage
   const getSkillsIntersection = (jobSkills: string[]) => {
@@ -103,15 +99,9 @@ export const JobCard: React.FC<JobCardProps> = ({
       <div className="job-card-actions flex gap-2 mt-auto pt-2">
         <button 
           onClick={() => onViewDetails(job)}
-          className="btn-view flex-1 bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-2 rounded-lg text-xs transition-colors cursor-pointer"
+          className="btn-view w-full bg-blue-600 border border-blue-600 text-white hover:bg-blue-700 font-bold py-2 rounded-lg text-xs transition-colors cursor-pointer text-center"
         >
           View Details
-        </button>
-        <button 
-          onClick={() => onApply(job.id, job.title)}
-          className="btn-apply flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-xs transition-colors cursor-pointer border-0"
-        >
-          {isApplied ? "Applied ✓" : "Apply Now"}
         </button>
       </div>
     </article>

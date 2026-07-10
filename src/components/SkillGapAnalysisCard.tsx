@@ -1,9 +1,65 @@
-import { ShieldAlert, Lightbulb, Sparkles, BookOpen, GraduationCap, Award, FolderGit2 } from "lucide-react";
+import { ShieldAlert, Lightbulb, Sparkles, BookOpen, GraduationCap, Award, FolderGit2, ExternalLink } from "lucide-react";
 import { SkillGapAnalysis, SkillGap } from "../types";
 
 interface SkillGapAnalysisCardProps {
   skillGapAnalysis: SkillGapAnalysis;
 }
+
+const getRecommendationUrl = (type: "course" | "cert" | "book" | "project", name: string) => {
+  const query = encodeURIComponent(name);
+  if (type === "course") {
+    if (name.toLowerCase().includes("coursera")) {
+      return `https://www.coursera.org/search?query=${query}`;
+    }
+    if (name.toLowerCase().includes("freecodecamp")) {
+      return `https://www.freecodecamp.org/`;
+    }
+    if (name.toLowerCase().includes("scrimba")) {
+      return "https://scrimba.com/";
+    }
+    if (name.toLowerCase().includes("codecademy")) {
+      return `https://www.codecademy.com/search?query=${query}`;
+    }
+    if (name.toLowerCase().includes("kodekloud")) {
+      return `https://kodekloud.com/`;
+    }
+    if (name.toLowerCase().includes("bytebytego")) {
+      return "https://bytebytego.com/";
+    }
+    return `https://www.google.com/search?q=${query}+online+course`;
+  }
+  if (type === "cert") {
+    if (name.includes("AWS Certified Cloud Practitioner")) {
+      return "https://aws.amazon.com/certification/certified-cloud-practitioner/";
+    }
+    if (name.includes("Google Cloud Associate Cloud Engineer")) {
+      return "https://cloud.google.com/learn/certification/associate-cloud-engineer";
+    }
+    if (name.includes("Certified Kubernetes Administrator")) {
+      return "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/";
+    }
+    if (name.includes("Docker Certified Associate")) {
+      return "https://training.mirantis.com/certification/dca-certification/";
+    }
+    if (name.includes("Meta Front-End Developer")) {
+      return "https://www.coursera.org/professional-certificates/meta-front-end-developer";
+    }
+    if (name.includes("Google Professional Machine Learning Engineer")) {
+      return "https://cloud.google.com/learn/certification/machine-learning-engineer";
+    }
+    if (name.includes("TensorFlow Developer")) {
+      return "https://www.tensorflow.org/certificate";
+    }
+    return `https://www.google.com/search?q=${query}+certification+exam`;
+  }
+  if (type === "book") {
+    return `https://www.google.com/search?tbm=bks&q=${query}`;
+  }
+  if (type === "project") {
+    return `https://github.com/search?q=${query}`;
+  }
+  return `https://www.google.com/search?q=${query}`;
+};
 
 const getFallbackRecommendations = (skillName: string) => {
   const normalized = skillName.toLowerCase();
@@ -145,9 +201,16 @@ export default function SkillGapAnalysisCard({ skillGapAnalysis }: SkillGapAnaly
                         </div>
                         <div className="flex flex-wrap gap-1.5 pl-5">
                           {recs.courses.map((course, cIdx) => (
-                            <span key={cIdx} className="bg-indigo-50/50 text-indigo-700 border border-indigo-100/50 text-[10px] px-2.5 py-1 rounded-md font-medium">
-                              {course}
-                            </span>
+                            <a 
+                              key={cIdx} 
+                              href={getRecommendationUrl("course", course)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-indigo-50/70 hover:bg-indigo-100/80 text-indigo-700 hover:text-indigo-800 border border-indigo-100 hover:border-indigo-200 text-[10px] px-2.5 py-1 rounded-md font-medium inline-flex items-center gap-1 transition-all cursor-pointer shadow-2xs hover:scale-[1.02]"
+                            >
+                              <span>{course}</span>
+                              <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                            </a>
                           ))}
                         </div>
                       </div>
@@ -162,9 +225,16 @@ export default function SkillGapAnalysisCard({ skillGapAnalysis }: SkillGapAnaly
                         </div>
                         <div className="flex flex-wrap gap-1.5 pl-5">
                           {recs.certifications.map((cert, cIdx) => (
-                            <span key={cIdx} className="bg-emerald-50/50 text-emerald-700 border border-emerald-100/50 text-[10px] px-2.5 py-1 rounded-md font-medium">
-                              {cert}
-                            </span>
+                            <a 
+                              key={cIdx} 
+                              href={getRecommendationUrl("cert", cert)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-700 hover:text-emerald-800 border border-emerald-100 hover:border-emerald-200 text-[10px] px-2.5 py-1 rounded-md font-medium inline-flex items-center gap-1 transition-all cursor-pointer shadow-2xs hover:scale-[1.02]"
+                            >
+                              <span>{cert}</span>
+                              <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                            </a>
                           ))}
                         </div>
                       </div>
@@ -179,9 +249,16 @@ export default function SkillGapAnalysisCard({ skillGapAnalysis }: SkillGapAnaly
                         </div>
                         <div className="flex flex-wrap gap-1.5 pl-5">
                           {recs.books.map((book, bIdx) => (
-                            <span key={bIdx} className="bg-amber-50/50 text-amber-700 border border-amber-100/50 text-[10px] px-2.5 py-1 rounded-md font-medium">
-                              {book}
-                            </span>
+                            <a 
+                              key={bIdx} 
+                              href={getRecommendationUrl("book", book)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-amber-50/70 hover:bg-amber-100/80 text-amber-700 hover:text-amber-800 border border-amber-100 hover:border-amber-200 text-[10px] px-2.5 py-1 rounded-md font-medium inline-flex items-center gap-1 transition-all cursor-pointer shadow-2xs hover:scale-[1.02]"
+                            >
+                              <span>{book}</span>
+                              <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                            </a>
                           ))}
                         </div>
                       </div>
@@ -196,9 +273,16 @@ export default function SkillGapAnalysisCard({ skillGapAnalysis }: SkillGapAnaly
                         </div>
                         <div className="flex flex-wrap gap-1.5 pl-5">
                           {recs.projects.map((proj, pIdx) => (
-                            <span key={pIdx} className="bg-purple-50/50 text-purple-700 border border-purple-100/50 text-[10px] px-2.5 py-1 rounded-md font-medium">
-                              {proj}
-                            </span>
+                            <a 
+                              key={pIdx} 
+                              href={getRecommendationUrl("project", proj)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-purple-50/70 hover:bg-purple-100/80 text-purple-700 hover:text-purple-800 border border-purple-100 hover:border-purple-200 text-[10px] px-2.5 py-1 rounded-md font-medium inline-flex items-center gap-1 transition-all cursor-pointer shadow-2xs hover:scale-[1.02]"
+                            >
+                              <span>{proj}</span>
+                              <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                            </a>
                           ))}
                         </div>
                       </div>

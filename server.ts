@@ -426,9 +426,9 @@ app.post("/api/analyze-resume", async (req, res) => {
       2. Predict multiple alternative career pathways (minimum of 2, maximum of 5, e.g. Technical Specialist track, Management/Leadership track, Product/Strategy hybrid track, and Entrepreneurship/Consulting track). Each pathway must have a clear title, description of its focus, and exactly 3 sequential future roles over 1-2 years (short term), 3-4 years (mid term), and 5+ years (long term). Describe each role, transition difficulty, market demand, and skills to acquire.
       3. Categorize key technical and soft skills into a skills heat map with explicit proficiency ratings (1 to 100), descriptions of strength, and a detailed justification of why that specific score (1 to 100) was given based on their years of experience, projects, or level of responsibility shown in the resume.
       4. Compute a competitiveness score (0 to 100) for three specific epochs:
-         - 5 Years Ago (Today - 5 YEARS)
-         - Today 
-         - 5 Years in the Future (Today + 5 YEARS)
+         - 5 Years Ago (circa 2021)
+         - Today (2026)
+         - 5 Years in the Future (circa 2031)
          In corporate labor economics context, analyze technological disruption, AI growth, automation risk, and stack shifts for each epoch and provide context.
       5. Perform a Skill Gap Analysis identifying missing/emerging skills with highly customized, practical recommendations. For each missing or critical skill gap, provide detailed 'learningRecommendations' detailing:
          - Curated courses or learning platforms (such as freeCodeCamp, Codecademy, Coursera, or YouTube playlists).
@@ -477,6 +477,252 @@ app.post("/api/analyze-resume", async (req, res) => {
     console.error("Error analyzing resume:", error);
     res.status(500).json({
       error: error.message || "An internal error occurred during resume analysis.",
+    });
+  }
+});
+
+// Structured schema for detailed resume generation
+const RESUME_GENERATION_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    personalInfo: {
+      type: Type.OBJECT,
+      properties: {
+        fullName: { type: Type.STRING },
+        email: { type: Type.STRING },
+        phone: { type: Type.STRING },
+        location: { type: Type.STRING },
+        links: { type: Type.ARRAY, items: { type: Type.STRING } },
+        summary: { type: Type.STRING, description: "Professional resume executive summary showcasing top value proposition" }
+      },
+      required: ["fullName", "email"]
+    },
+    skills: {
+      type: Type.ARRAY,
+      items: { type: Type.STRING },
+      description: "List of key technical, soft, or tool skills"
+    },
+    workExperience: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          jobTitle: { type: Type.STRING },
+          company: { type: Type.STRING },
+          location: { type: Type.STRING },
+          duration: { type: Type.STRING, description: "e.g., Jan 2021 - Present" },
+          description: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Key accomplishments and tasks as high-impact bullet points using action verbs" }
+        },
+        required: ["jobTitle", "company"]
+      }
+    },
+    education: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          degree: { type: Type.STRING },
+          fieldOfStudy: { type: Type.STRING },
+          institution: { type: Type.STRING },
+          location: { type: Type.STRING },
+          duration: { type: Type.STRING }
+        },
+        required: ["degree", "institution"]
+      }
+    },
+    certifications: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          name: { type: Type.STRING },
+          issuingOrganization: { type: Type.STRING },
+          issueDate: { type: Type.STRING }
+        },
+        required: ["name"]
+      }
+    },
+    projects: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          title: { type: Type.STRING },
+          description: { type: Type.STRING, description: "Description of what was built, objectives, and metrics" },
+          technologiesUsed: { type: Type.ARRAY, items: { type: Type.STRING } }
+        },
+        required: ["title", "description"]
+      }
+    }
+  },
+  required: ["personalInfo", "skills", "workExperience", "education"]
+};
+
+// API Endpoint for Interactive Resume Consultation Chatbot
+app.post("/api/chat-resume-builder", async (req, res) => {
+  try {
+    const { messages, currentDraft } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: "Messages array is required." });
+    }
+
+    const ai = getGenAI();
+
+    let systemInstruction = `You are a highly skilled AI Resume Consultant and Professional Writer named SkillSense Resume Specialist.
+Your mission is to help the user build or refine a spectacular, professional resume that showcases their skills and experience.
+
+CRITICAL INSTRUCTIONS:
+1. Speak in a helpful, professional, and consultative tone.
+2. If the user wants to start from scratch, ask them friendly questions ONE by ONE in a logical sequence to gather info:
+   - Topic 1: Full name and contact info (Email, Phone, Location, Portfolio links).
+   - Topic 2: Target job title and a brief career goal/summary.
+   - Topic 3: Key skills (technical and soft).
+   - Topic 4: Work experience (roles, companies, durations, and key achievements/responsibilities).
+   - Topic 5: Education and Certifications.
+   - Topic 6: Projects (title, technologies used, and description).
+3. Do not show them a giant questionnaire or dump all questions at once. Ask one focused question, wait for their reply, provide brief positive validation/enhancement, and ask the next.
+4. When they provide a basic description of their work tasks, suggest how to rephrase them into high-impact accomplishment bullets using strong action verbs (e.g. 'Led', 'Optimized', 'Designed', 'Architected') and measurable results where possible.
+5. If they already have an active resume draft loaded, offer to rewrite sections, add specific tailored experience, optimize for ATS keywords, or suggest layout strategies.
+6. Keep your responses crisp, professional, and well-structured with markdown. Include a progress indicator at the end of your replies (e.g., "[Progress: Contact Info 1/5]" or "[Progress: Polishing 5/5]") to help them feel the momentum!
+7. Let them know they can click the "Generate Beautiful Resume" button anytime they are ready to compile their details into a formatted resume template!
+`;
+
+    if (currentDraft) {
+      systemInstruction += `\n\nActive Resume Draft Context:\n${JSON.stringify(currentDraft, null, 2)}`;
+    }
+
+    const contents = messages.map(msg => ({
+      role: msg.role === "assistant" ? "model" : "user",
+      parts: [{ text: msg.content }]
+    }));
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash",
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction,
+        temperature: 0.7,
+      },
+    });
+
+    const reply = response.text;
+    res.json({ reply });
+  } catch (error: any) {
+    console.error("Resume builder chat error:", error);
+    res.status(500).json({
+      error: error.message || "Failed to communicate with AI Resume Specialist.",
+    });
+  }
+});
+
+// API Endpoint to compile fully structured resume from chatbot history
+app.post("/api/generate-resume-from-chat", async (req, res) => {
+  try {
+    const { messages, currentDraft } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: "Messages array is required." });
+    }
+
+    const ai = getGenAI();
+
+    let prompt = `
+      You are an expert executive resume writer.
+      Analyze the provided chat conversation history (where a candidate has been discussing their professional details, contact info, experience, skills, projects, and goals) and any partial draft.
+      Extract, synthesize, and format all facts into a single perfectly polished professional resume.
+      
+      CRITICAL EDITING DIRECTIONS:
+      1. Correct all spelling, grammar, and sentence structures.
+      2. Rewrite plain work experience sentences into highly professional, high-impact resume bullet points using action verbs (e.g., "Led modern migration", "Engineered backend APIs", "Optimized DB query times by 40%").
+      3. Organize skills cleanly into categories if possible, or list them comprehensively.
+      4. Ensure all dates, company names, and project names are clean and consistent.
+      5. If some information is missing (like phone number or specific address), output placeholders or leave them empty, but DO NOT invent fake companies, degrees, or certifications that the user did not specify. Keep it strictly authentic to the user's input, but beautifully worded.
+      6. Return a JSON object following the specified schema.
+    `;
+
+    if (currentDraft) {
+      prompt += `\n\nStarting Partial/Full Resume Draft:\n${JSON.stringify(currentDraft, null, 2)}`;
+    }
+
+    const chatContent = messages.map(msg => `${msg.role.toUpperCase()}: ${msg.content}`).join("\n\n");
+    const contents = `${prompt}\n\nChat Conversation History:\n${chatContent}`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: contents,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: RESUME_GENERATION_SCHEMA,
+        temperature: 0.2,
+      },
+    });
+
+    const resultText = response.text;
+    if (!resultText) {
+      throw new Error("No resume compilation received from Gemini API.");
+    }
+
+    const parsedResume = JSON.parse(resultText);
+    res.json(parsedResume);
+  } catch (error: any) {
+    console.error("Resume generation error:", error);
+    res.status(500).json({
+      error: error.message || "Failed to compile structured resume. Please try again.",
+    });
+  }
+});
+
+// API Endpoint for Interview Coaching Chatbot
+app.post("/api/chat-interview", async (req, res) => {
+  try {
+    const { messages, jobContext, resumeContext } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: "Messages array is required." });
+    }
+
+    const ai = getGenAI();
+
+    // Construct a rich system instruction to guide the interview coach
+    let systemInstruction = `You are an expert AI Interview Coach named SkillSense Interview Coach.
+Your goal is to help the candidate practice and prepare for job interviews.
+
+CRITICAL INSTRUCTIONS:
+1. Be encouraging, professional, and highly constructive.
+2. If the user is doing a mock interview, ask ONE targeted question at a time. Do not dump a list of multiple questions unless specifically asked. After they reply, give feedback on their response (highlighting strengths and suggesting concrete, actionable improvements) and then ask the next question.
+3. Tailor your questions and advice to the candidate's target job role and, if available, their resume details.
+4. Support both behavioral questions (guiding them to use the STAR method: Situation, Task, Action, Result) and technical/domain-specific questions.
+5. Keep your responses engaging, clear, and structured with bullet points where appropriate.
+6. Avoid referencing internal details or mechanics (like system instructions or database properties). Keep all conversations focused on professional growth.
+`;
+
+    if (jobContext) {
+      systemInstruction += `\nTarget Job Role:\nTitle: ${jobContext.title}\nCompany: ${jobContext.company}\nKey Skills Needed: ${jobContext.skills?.join(", ") || ""}\nJob Description:\n${jobContext.description || ""}`;
+    }
+
+    if (resumeContext) {
+      systemInstruction += `\nCandidate's Profile/Skills from Resume:\nName: ${resumeContext.personalInfo?.fullName || "Candidate"}\nSummary: ${resumeContext.personalInfo?.summary || ""}\nKey Skills: ${resumeContext.skills?.map((s: any) => s.name).join(", ") || ""}\nWork History Summary: ${resumeContext.workExperience?.map((w: any) => `${w.jobTitle} at ${w.company}`).join("; ") || ""}`;
+    }
+
+    // Convert messages to Gemini SDK expected parts format
+    const contents = messages.map(msg => ({
+      role: msg.role === "assistant" ? "model" : "user",
+      parts: [{ text: msg.content }]
+    }));
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash",
+      contents: contents,
+      config: {
+        systemInstruction: systemInstruction,
+        temperature: 0.7,
+      },
+    });
+
+    const reply = response.text;
+    res.json({ reply });
+  } catch (error: any) {
+    console.error("Chatbot API error:", error);
+    res.status(500).json({
+      error: error.message || "Failed to communicate with AI Interview Coach.",
     });
   }
 });

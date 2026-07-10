@@ -4,16 +4,12 @@ import { Job } from "../types";
 
 interface JobDetailsModalProps {
   job: Job;
-  isApplied: boolean;
   onClose: () => void;
-  onApply: (jobId: string, jobTitle: string) => void;
 }
 
 export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
   job,
-  isApplied,
   onClose,
-  onApply,
 }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs overflow-y-auto" id="job-detail-modal">
@@ -98,18 +94,9 @@ export const JobDetailsModal: React.FC<JobDetailsModalProps> = ({
         <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex gap-3 justify-end">
           <button 
             onClick={onClose}
-            className="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl text-sm border border-slate-200 transition-colors cursor-pointer"
-          >
-            Close
-          </button>
-          <button 
-            onClick={() => {
-              onApply(job.id, job.title);
-              onClose();
-            }}
             className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm border-0 transition-colors cursor-pointer shadow-md shadow-blue-100"
           >
-            {isApplied ? "Already Applied ✓" : "Apply for Role"}
+            Close Window
           </button>
         </div>
 
