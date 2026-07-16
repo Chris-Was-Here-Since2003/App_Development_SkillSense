@@ -206,22 +206,26 @@ export default function App() {
                 setSelectedJob={setSelectedJob}
               />
             ) : currentTab === "interview" ? (
-              <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8 space-y-6">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-6 rounded-2xl border border-slate-200 gap-4 shadow-xs">
-                  <div>
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-                      <MessageSquare className="w-6 h-6 text-emerald-600" />
-                      AI Interview Coaching Room
-                    </h2>
-                    <p className="text-xs text-slate-500 font-medium mt-1">
-                      Practice professional mock interviews, master behavioral questions with STAR feedback, and prepare tailored questions.
-                    </p>
+              <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+                <div className="max-w-6xl mx-auto space-y-8">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-7 sm:p-8 rounded-2xl border border-slate-200 gap-5 shadow-md">
+                    <div>
+                      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3 mb-2">
+                        <MessageSquare className="w-7 h-7 text-emerald-600" />
+                        AI Interview Coaching Room
+                      </h2>
+                      <p className="text-sm text-slate-600 font-medium">
+                        Practice professional mock interviews, master behavioral questions with STAR feedback, and prepare tailored questions.
+                      </p>
+                    </div>
                   </div>
+                  <InterviewChatbot analysisResult={analysisResult} />
                 </div>
-                <InterviewChatbot analysisResult={analysisResult} />
               </div>
             ) : currentTab === "resume" ? (
-              <ResumeGenerator analysisResult={analysisResult} />
+              <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+                <ResumeGenerator analysisResult={analysisResult} />
+              </div>
             ) : (
               <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8">
                 {analysisResult ? (

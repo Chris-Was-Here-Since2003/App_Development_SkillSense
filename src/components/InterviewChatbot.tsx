@@ -104,7 +104,7 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
   const [showRolesDropdown, setShowRolesDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -139,10 +139,7 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
     return Array.from(rolesSet).filter(Boolean);
   };
 
-  // Auto scroll to bottom of chat
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
+
 
   // Sync state if analysisResult changes
   useEffect(() => {
@@ -245,17 +242,17 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
   };
 
   return (
-    <div className="interview-coach-container bg-white border border-[#E5E7EB] rounded-2xl shadow-sm grid grid-cols-1 lg:grid-cols-4 overflow-hidden h-[calc(100vh-12rem)] min-h-[500px]" id="interview-coach">
+    <div className="interview-coach-container bg-white border border-[#E5E7EB] rounded-2xl shadow-lg grid grid-cols-1 lg:grid-cols-5 overflow-hidden h-[calc(100vh-18rem)] min-h-[600px]" id="interview-coach">
       
       {/* Left Sidebar: Options & Configs */}
-      <div className="lg:col-span-1 border-r border-[#E5E7EB] bg-slate-50/50 p-5 flex flex-col gap-6 overflow-y-auto">
+      <div className="lg:col-span-1 border-r border-[#E5E7EB] bg-slate-50/50 p-6 sm:p-7 lg:p-8 flex flex-col gap-7 sm:gap-9 overflow-y-auto max-h-screen">
         <div>
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">💡 Configuration</h3>
-          <p className="text-xs text-slate-500 leading-relaxed mb-4">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 text-blue-600">💡 Configuration</h3>
+          <p className="text-xs text-slate-600 leading-relaxed mb-6 font-medium">
             Customize the AI's persona, context, and focus to perfectly simulate your actual upcoming interview.
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-7">
             {/* Resume Context Option */}
             <div>
               <label className="flex items-start gap-2 cursor-pointer group">
@@ -284,8 +281,8 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
             </div>
 
             {/* Custom target role with Autocomplete Dropdown */}
-            <div className="space-y-1 relative" ref={dropdownRef}>
-              <label className="block text-xs font-bold text-slate-700">Target Role</label>
+            <div className="space-y-2 relative" ref={dropdownRef}>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">🎯 Target Role</label>
               <div className="relative">
                 <input 
                   type="text"
@@ -412,8 +409,8 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
             </div>
 
             {/* Custom Target Company */}
-            <div className="space-y-1">
-              <label className="block text-xs font-bold text-slate-700">Company Name</label>
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">🏢 Company Name</label>
               <input 
                 type="text"
                 value={customCompany}
@@ -425,40 +422,40 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
           </div>
         </div>
 
-        <div className="mt-auto border-t border-slate-200 pt-4">
+        <div className="mt-auto border-t border-slate-200 pt-7">
           <button
             onClick={handleResetChat}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl cursor-pointer transition-colors bg-white"
+            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl cursor-pointer transition-colors bg-white hover:shadow-md"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <RefreshCw className="w-4 h-4" />
             Reset Practice Session
           </button>
         </div>
       </div>
 
       {/* Right Content: Chat & Tracks */}
-      <div className="lg:col-span-3 flex flex-col h-full overflow-hidden bg-white">
+      <div className="lg:col-span-4 flex flex-col h-full overflow-hidden bg-white">
         
         {/* Chat Messages Port */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4 min-h-[300px]">
+        <div className="flex-1 overflow-y-auto p-8 sm:p-9 space-y-7 min-h-[350px]">
           
           {/* Preset tracks overlay inside chat if no track is selected yet and conversation is empty/initial */}
           {!selectedTrack && messages.length === 1 && (
-            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
+            <div className="mb-9 grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
               {PRESET_TRACKS.map((track) => {
                 const IconComponent = track.icon;
                 return (
                   <button
                     key={track.id}
                     onClick={() => startTrack(track.id, track.initialPrompt)}
-                    className={`text-left p-4 rounded-2xl border border-[#E5E7EB] cursor-pointer transition-all hover:scale-[1.01] hover:shadow-md hover:border-blue-200 flex items-start gap-4 ${track.color}`}
+                    className={`text-left p-6 rounded-2xl border border-[#E5E7EB] cursor-pointer transition-all hover:scale-[1.02] hover:shadow-xl hover:border-blue-200 flex items-start gap-5 ${track.color}`}
                   >
-                    <div className="p-2.5 rounded-xl bg-white/80 shrink-0 border border-current/10 shadow-xs">
-                      <IconComponent className="w-5 h-5" />
+                    <div className="p-3.5 rounded-xl bg-white/80 shrink-0 border border-current/10 shadow-md">
+                      <IconComponent className="w-6 h-6" />
                     </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-extrabold text-slate-900">{track.name}</h4>
-                      <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                    <div className="space-y-2">
+                      <h4 className="text-base font-extrabold text-slate-900 leading-tight">{track.name}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed font-medium">
                         {track.description}
                       </p>
                     </div>
@@ -483,35 +480,39 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
                 </div>
 
                 {/* Message Bubble */}
-                <div className={`rounded-2xl p-4 leading-relaxed text-sm ${
+                <div className={`rounded-2xl p-6 sm:p-7 leading-relaxed text-sm ${
                   isAI 
                     ? "bg-slate-50 border border-slate-100 text-slate-800" 
                     : "bg-blue-600 text-white shadow-md shadow-blue-100"
                 }`}>
-                  <div className="whitespace-pre-line font-medium text-xs md:text-sm">
+                  <div className="space-y-2.5 text-xs md:text-sm">
                     {/* Convert simple markdown headings and list items to cleaner layouts */}
                     {message.content.split("\n").map((line, i) => {
+                      if (!line.trim()) {
+                        return <div key={i} className="h-1" />;
+                      }
+                      
                       if (line.startsWith("**") && line.endsWith("**")) {
-                        return <strong key={i} className="block text-slate-900 font-bold mb-1">{line.replaceAll("**", "")}</strong>;
+                        return <strong key={i} className="block text-slate-900 font-extrabold text-base mt-2.5 mb-1.5 leading-tight">{line.replaceAll("**", "")}</strong>;
                       }
                       if (line.startsWith("- ") || line.startsWith("* ")) {
                         return (
                           <div key={i} className="flex gap-1.5 pl-2 py-0.5">
                             <span className={isAI ? "text-blue-500 font-bold" : "text-white"}>•</span>
-                            <span>{line.substring(2)}</span>
+                            <span className="leading-relaxed">{line.substring(2)}</span>
                           </div>
                         );
                       }
                       
-                      // Handle inline bold formatting
-                      const parts = line.split(/(\*\*.*?\*\*)/g);
+                      // Handle inline bold formatting more robustly
+                      const parts = line.split(/(\*\*[^*]+\*\*)/g).filter(p => p !== '');
                       return (
-                        <p key={i} className="mb-1 last:mb-0">
+                        <p key={i} className="leading-relaxed">
                           {parts.map((part, pIdx) => {
                             if (part.startsWith("**") && part.endsWith("**")) {
                               return <strong key={pIdx} className={isAI ? "text-slate-900 font-bold" : "text-white font-extrabold"}>{part.replaceAll("**", "")}</strong>;
                             }
-                            return part;
+                            return <span key={pIdx}>{part}</span>;
                           })}
                         </p>
                       );
@@ -543,7 +544,7 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
+
         </div>
 
         {/* Action Suggestion Chips above input */}

@@ -457,7 +457,7 @@ app.post("/api/analyze-resume", async (req, res) => {
 
     // Call the model (we use gemini-2.5-flash as the default reliable model)
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.1-flash-lite",
       contents: contents,
       config: {
         responseMimeType: "application/json",
@@ -597,7 +597,7 @@ CRITICAL INSTRUCTIONS:
     }));
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-flash-lite",
       contents: contents,
       config: {
         systemInstruction: systemInstruction,
@@ -647,7 +647,7 @@ app.post("/api/generate-resume-from-chat", async (req, res) => {
     const contents = `${prompt}\n\nChat Conversation History:\n${chatContent}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.1-flash-lite",
       contents: contents,
       config: {
         responseMimeType: "application/json",
@@ -709,7 +709,7 @@ CRITICAL INSTRUCTIONS:
     }));
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-flash-lite",
       contents: contents,
       config: {
         systemInstruction: systemInstruction,

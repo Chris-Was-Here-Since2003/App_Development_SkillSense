@@ -94,6 +94,7 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
   const [accentColor, setAccentColor] = useState("#3B82F6"); // Default blue
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const skipAutoScrollRef = useRef(false);
 
   // Pre-configured accent colors
   const ACCENT_COLORS = [
@@ -107,8 +108,16 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
 
   // Auto-scroll chat to bottom
   useEffect(() => {
+    if (skipAutoScrollRef.current) return;
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Reset skip-auto-scroll flag once AI response finishes loading
+  useEffect(() => {
+    if (!isChatLoading) {
+      skipAutoScrollRef.current = false;
+    }
+  }, [isChatLoading]);
 
   // Handle importing active career analysis as starting point
   const handleImportAnalysis = () => {
@@ -335,7 +344,7 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
   const style = getTemplateStyles();
 
   return (
-    <div className="min-h-screen bg-slate-50/50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="w-full">
       {/* Hidden print stylesheet rules injected specifically for seamless PDF saving */}
       <style>{`
         @media print {
@@ -360,27 +369,27 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
 
       <div className="max-w-7xl mx-auto">
         {/* Header section */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-200 pb-5 mb-8 gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-200 pb-6 sm:pb-8 mb-8 sm:mb-10 gap-5">
           <div>
-            <div className="flex items-center gap-2 text-purple-600 font-bold text-xs uppercase tracking-wider mb-1">
+            <div className="flex items-center gap-2 text-purple-600 font-bold text-xs uppercase tracking-wider mb-2">
               <Sparkles className="w-4 h-4 animate-spin-slow" />
               Interactive Co-Pilot
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 font-sans tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 font-sans tracking-tight mb-2">
               AI Resume Generator
             </h1>
-            <p className="text-xs text-slate-500 mt-1 max-w-xl">
+            <p className="text-sm text-slate-600 max-w-2xl leading-relaxed font-medium">
               Collaborate with an expert resume consultant to dynamically write, format, and optimize your resume for high ATS compatibility.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {analysisResult && (
               <button
                 onClick={handleImportAnalysis}
-                className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-xs px-3.5 py-2 rounded-xl transition-all border border-blue-100 cursor-pointer"
+                className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-xs px-4 py-3 rounded-xl transition-all border border-blue-100 cursor-pointer shadow-sm hover:shadow-md"
               >
-                <Zap className="w-3.5 h-3.5 text-blue-600" />
+                <Zap className="w-4 h-4 text-blue-600" />
                 Import Profile
               </button>
             )}
@@ -459,22 +468,22 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
         </div>
 
         {/* Main Grid: Left is Consultation Chat, Right is Resume Preview */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
           {/* Chat Panel: 5 columns on large screen */}
-          <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col h-[750px] overflow-hidden">
+          <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl shadow-lg flex flex-col h-auto lg:h-[750px] overflow-hidden">
             {/* Header */}
-            <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 bg-purple-100 rounded-xl flex items-center justify-center shrink-0 border border-purple-200">
+            <div className="p-5 sm:p-6 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0 border border-purple-200 shadow-sm">
                   <FileText className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                     SkillSense Specialist
-                    <span className="inline-flex w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="inline-flex w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   </h3>
-                  <p className="text-[10px] text-slate-500 font-medium">Active Consulting Session</p>
+                  <p className="text-xs text-slate-500 font-medium">Active Consulting Session</p>
                 </div>
               </div>
 
@@ -494,7 +503,7 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
             </div>
 
             {/* Conversation Flow */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5 sm:space-y-6">
               {messages.map((msg, index) => {
                 const isAI = msg.role === "assistant";
                 return (
@@ -543,7 +552,7 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
             </div>
 
             {/* Suggested Shortcuts */}
-            <div className="px-4 py-2 bg-slate-50/50 border-t border-slate-100 flex flex-wrap gap-1.5 shrink-0">
+            <div className="px-3 sm:px-4 py-2 bg-slate-50/50 border-t border-slate-100 flex flex-wrap gap-1 sm:gap-1.5 shrink-0 overflow-y-auto max-h-20">
               {messages.length === 1 && (
                 <>
                   <button
@@ -569,19 +578,25 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
               {messages.length > 1 && (
                 <>
                   <button
-                    onClick={() => handleSendMessage(undefined, "Can you draft a strong Summary statement focusing on tech leadership?")}
+                    onClick={() => { skipAutoScrollRef.current = true; handleSendMessage(undefined, "I want to start from scratch and build a new resume."); }}
+                    className="text-[10px] bg-white border border-slate-200 hover:border-purple-300 hover:bg-purple-50/20 text-slate-600 hover:text-purple-700 px-2 py-1.5 rounded-lg font-bold transition-all cursor-pointer"
+                  >
+                    🆕 Start from Scratch
+                  </button>
+                  <button
+                    onClick={() => { skipAutoScrollRef.current = true; handleSendMessage(undefined, "Can you draft a strong Summary statement focusing on tech leadership?"); }}
                     className="text-[10px] bg-white border border-slate-200 hover:border-blue-200 hover:bg-blue-50/30 text-slate-600 hover:text-blue-700 px-2 py-1.5 rounded-lg transition-all cursor-pointer"
                   >
                     ✍️ Draft Summary
                   </button>
                   <button
-                    onClick={() => handleSendMessage(undefined, "How can I rewrite my experience bullets to include metrics?")}
+                    onClick={() => { skipAutoScrollRef.current = true; handleSendMessage(undefined, "How can I rewrite my experience bullets to include metrics?"); }}
                     className="text-[10px] bg-white border border-slate-200 hover:border-blue-200 hover:bg-blue-50/30 text-slate-600 hover:text-blue-700 px-2 py-1.5 rounded-lg transition-all cursor-pointer"
                   >
                     📊 Add Metrics
                   </button>
                   <button
-                    onClick={() => handleSendMessage(undefined, "Suggest the top 10 core soft & hard skills for Frontend/Fullstack devs.")}
+                    onClick={() => { skipAutoScrollRef.current = true; handleSendMessage(undefined, "Suggest the top 10 core soft & hard skills for Frontend/Fullstack devs."); }}
                     className="text-[10px] bg-white border border-slate-200 hover:border-blue-200 hover:bg-blue-50/30 text-slate-600 hover:text-blue-700 px-2 py-1.5 rounded-lg transition-all cursor-pointer"
                   >
                     🛠️ Tech Skills
@@ -591,13 +606,13 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
             </div>
 
             {/* Input Form */}
-            <form onSubmit={handleSendMessage} className="p-4 bg-slate-50 border-t border-slate-200 flex gap-2">
+            <form onSubmit={handleSendMessage} className="p-5 sm:p-6 bg-slate-50 border-t border-slate-200 flex gap-3 flex-shrink-0">
               <input
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Type your background details, ask to rewrite, etc..."
-                className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 min-w-0"
                 disabled={isChatLoading}
               />
               <button
@@ -610,15 +625,15 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
             </form>
 
             {/* Bottom Action Bar */}
-            <div className="p-4 bg-purple-50 border-t border-purple-100 shrink-0 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="p-5 sm:p-6 bg-purple-50 border-t border-purple-100 shrink-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+              <div className="flex items-center gap-2 flex-wrap">
                 <Info className="w-3.5 h-3.5 text-purple-600 shrink-0" />
-                <span className="text-[10px] text-purple-800 font-semibold">Done chatting? Let's compile.</span>
+                <span className="text-[10px] text-purple-800 font-semibold leading-normal">Done chatting? Let's compile.</span>
               </div>
               <button
                 onClick={handleCompileResume}
                 disabled={isCompiling}
-                className="bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-sm cursor-pointer shrink-0 disabled:opacity-50"
+                className="bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl flex items-center gap-1 sm:gap-1.5 transition-all shadow-sm cursor-pointer shrink-0 disabled:opacity-50 w-full sm:w-auto justify-center sm:justify-start"
               >
                 {isCompiling ? (
                   <>
@@ -636,21 +651,21 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
           </div>
 
           {/* Preview Panel: 7 columns on large screen */}
-          <div className="lg:col-span-7 flex flex-col gap-4">
+          <div className="lg:col-span-7 flex flex-col gap-4 h-auto">
             
             {/* Quick Design controls */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div>
-                    <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                      <Palette className="w-3.5 h-3.5" />
+            <div className="bg-white border border-slate-200 rounded-2xl p-3 sm:p-4 shadow-sm">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <div className="w-full sm:w-auto">
+                    <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Palette className="w-4 h-4" />
                       Layout Theme
                     </span>
-                    <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+                    <div className="flex items-center bg-slate-100 p-1 rounded-xl flex-wrap gap-1">
                       <button
                         onClick={() => setSelectedTemplate("modern")}
-                        className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        className={`text-[10px] font-bold px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                           selectedTemplate === "modern" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"
                         }`}
                       >
@@ -658,7 +673,7 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
                       </button>
                       <button
                         onClick={() => setSelectedTemplate("executive")}
-                        className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        className={`text-[10px] font-bold px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                           selectedTemplate === "executive" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"
                         }`}
                       >
@@ -666,7 +681,7 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
                       </button>
                       <button
                         onClick={() => setSelectedTemplate("tech")}
-                        className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                        className={`text-[10px] font-bold px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                           selectedTemplate === "tech" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"
                         }`}
                       >
@@ -675,9 +690,9 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
                     </div>
                   </div>
 
-                  <div>
-                    <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                      <Palette className="w-3.5 h-3.5" />
+                  <div className="w-full sm:w-auto">
+                    <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2.5">
+                      <Palette className="w-4 h-4" />
                       Accent Color
                     </span>
                     <div className="flex items-center gap-1.5">
@@ -725,7 +740,7 @@ export const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({ analysisResult
             </div>
 
             {/* Document preview viewport */}
-            <div className="bg-slate-200 p-4 sm:p-6 rounded-3xl overflow-y-auto max-h-[660px] border border-slate-300 shadow-inner flex flex-col justify-start">
+            <div className="bg-slate-200 p-5 sm:p-6 md:p-8 rounded-3xl overflow-y-auto max-h-[500px] sm:max-h-[650px] lg:max-h-[700px] border border-slate-300 shadow-inner flex flex-col justify-start">
               
               <AnimatePresence mode="wait">
                 {resumeData ? (

@@ -106,54 +106,55 @@ export default function ResumeUpload({ onAnalyze, isLoading }: ResumeUploadProps
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8" id="resume-upload-container">
+    <div className="w-full px-4 sm:px-6 lg:px-8" id="resume-upload-container">
+      <div className="max-w-5xl mx-auto space-y-10 sm:space-y-14 py-6 sm:py-8 lg:py-10">
       {/* Intro section */}
-      <div className="text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium">
-          <Sparkles className="w-4 h-4 animate-pulse" />
+      <div className="text-center space-y-5 sm:space-y-7">
+        <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs sm:text-sm font-bold shadow-sm">
+          <Sparkles className="w-5 h-5 animate-pulse" />
           Next-Gen AI Labor Market Analysis
         </div>
-        <h1 className="text-4xl md:text-5xl font-sans font-bold tracking-tight text-gray-900">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-sans font-extrabold tracking-tight text-gray-900 leading-tight">
           Unveil Your Career Trajectory
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg sm:text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
           Upload your resume to instantly generate a predictive career progression roadmap, visual skill heat map, and 10-year market competitiveness scoring powered by Gemini AI.
         </p>
       </div>
 
       {/* Main interaction cards */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="border-b border-gray-200 bg-gray-50/50 flex">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
+        <div className="border-b border-gray-200 bg-gray-50/50 flex flex-col sm:flex-row">
           <button
             onClick={() => setPasteMode(false)}
-            className={`flex-1 py-4 px-6 text-sm font-medium border-b-2 transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 py-4 sm:py-5 px-5 sm:px-8 text-xs sm:text-sm font-extrabold border-b-2 sm:border-b-0 sm:border-r transition-all flex items-center justify-center gap-2 hover:shadow-sm ${
               !pasteMode
-                ? "border-indigo-600 text-indigo-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900"
+                ? "border-indigo-600 text-indigo-600 bg-white shadow-sm"
+                : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
             }`}
             id="tab-file-upload"
           >
-            <Upload className="w-4 h-4" />
+            <Upload className="w-5 h-5" />
             Upload Document / Image
           </button>
           <button
             onClick={() => setPasteMode(true)}
-            className={`flex-1 py-4 px-6 text-sm font-medium border-b-2 transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 py-4 sm:py-5 px-5 sm:px-8 text-xs sm:text-sm font-extrabold border-b-2 sm:border-b-0 transition-all flex items-center justify-center gap-2 hover:shadow-sm ${
               pasteMode
-                ? "border-indigo-600 text-indigo-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900"
+                ? "border-indigo-600 text-indigo-600 bg-white shadow-sm"
+                : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
             }`}
             id="tab-paste-text"
           >
-            <Clipboard className="w-4 h-4" />
+            <Clipboard className="w-5 h-5" />
             Paste Plain Text
           </button>
         </div>
 
-        <div className="p-8">
+        <div className="p-10 sm:p-12 lg:p-14">
           {fileError && (
-            <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="mb-8 p-5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm flex items-start gap-3 font-medium">
+              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-1" />
               <div>{fileError}</div>
             </div>
           )}
@@ -165,7 +166,7 @@ export default function ResumeUpload({ onAnalyze, isLoading }: ResumeUploadProps
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={triggerFileInput}
-              className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-4 ${
+              className={`border-2 border-dashed rounded-2xl p-12 sm:p-16 text-center cursor-pointer transition-all flex flex-col items-center justify-center space-y-5 sm:space-y-6 ${
                 isDragOver
                   ? "border-indigo-500 bg-indigo-50/40"
                   : "border-gray-300 hover:border-indigo-400 hover:bg-gray-50/40"
@@ -179,26 +180,26 @@ export default function ResumeUpload({ onAnalyze, isLoading }: ResumeUploadProps
                 accept=".pdf,.txt,image/png,image/jpeg,image/jpg"
                 className="hidden"
               />
-              <div className="p-4 bg-indigo-50 rounded-full text-indigo-600">
-                <Upload className="w-8 h-8 animate-bounce" style={{ animationDuration: '3s' }} />
+              <div className="p-4 sm:p-5 bg-indigo-50 rounded-full text-indigo-600 shadow-md">
+                <Upload className="w-8 sm:w-10 h-8 sm:h-10 animate-bounce" style={{ animationDuration: '3s' }} />
               </div>
-              <div className="space-y-1">
-                <p className="text-base font-semibold text-gray-900">
+              <div className="space-y-2 sm:space-y-3">
+                <p className="text-base sm:text-lg font-bold text-gray-900">
                   Drag and drop your resume file here
                 </p>
-                <p className="text-sm text-gray-500">
-                  or <span className="text-indigo-600 font-medium">browse local files</span>
+                <p className="text-sm sm:text-base text-gray-600 font-medium">
+                  or <span className="text-indigo-600 font-bold">browse local files</span>
                 </p>
               </div>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-500 font-medium">
                 Supports PDF, Plain Text (.txt), and Images (PNG, JPG) up to 10MB
               </p>
             </div>
           ) : (
             /* Paste text zone */
-            <form onSubmit={handlePasteSubmit} className="space-y-4">
+            <form onSubmit={handlePasteSubmit} className="space-y-6">
               <div>
-                <label htmlFor="pasted-resume" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="pasted-resume" className="block text-base font-bold text-gray-900 mb-3">
                   Paste raw resume or profile details:
                 </label>
                 <textarea
@@ -207,17 +208,17 @@ export default function ResumeUpload({ onAnalyze, isLoading }: ResumeUploadProps
                   value={pastedText}
                   onChange={(e) => setPastedText(e.target.value)}
                   placeholder="Paste your work experience, education, certifications, and skills details here..."
-                  className="w-full rounded-xl border border-gray-300 p-4 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all font-mono"
+                  className="w-full rounded-xl border border-gray-300 p-5 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all font-mono leading-relaxed"
                   required
                 />
               </div>
               <button
                 type="submit"
                 disabled={isLoading || !pastedText.trim()}
-                className="w-full bg-indigo-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-indigo-600 text-white py-4 px-6 rounded-xl font-bold text-base hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-md hover:shadow-lg"
                 id="submit-pasted-text"
               >
-                <Sparkles className="w-5 h-5" />
+                <Sparkles className="w-6 h-6" />
                 Analyze Pasted Resume Text
               </button>
             </form>
@@ -226,34 +227,34 @@ export default function ResumeUpload({ onAnalyze, isLoading }: ResumeUploadProps
       </div>
 
       {/* Quick Load Samples */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="h-[1px] bg-gray-200 flex-1"></div>
-          <span className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <div className="h-[1px] bg-gray-300 flex-1"></div>
+          <span className="text-sm font-bold text-gray-600 uppercase tracking-wider px-3">
             Or test with a sample profile
           </span>
-          <div className="h-[1px] bg-gray-200 flex-1"></div>
+          <div className="h-[1px] bg-gray-300 flex-1"></div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-7">
           {Object.entries(SAMPLE_RESUMES).map(([key, value]) => (
             <button
               key={key}
               onClick={() => onAnalyze({ isSample: true, sampleName: key })}
-              className="bg-white border border-gray-200 rounded-xl p-5 text-left hover:border-indigo-400 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-200 group flex items-start gap-4"
+              className="bg-white border border-gray-200 rounded-2xl p-7 sm:p-8 text-left hover:border-indigo-400 hover:shadow-xl transition-all focus:outline-none focus:ring-2 focus:ring-indigo-300 group flex items-start gap-6 hover:scale-[1.02]"
               id={`sample-button-${key}`}
             >
-              <div className="p-3 bg-indigo-50 rounded-lg text-indigo-600 group-hover:bg-indigo-100 transition-colors shrink-0">
-                <FileText className="w-5 h-5" />
+              <div className="p-5 bg-indigo-50 rounded-lg text-indigo-600 group-hover:bg-indigo-100 transition-colors shrink-0 shadow-md">
+                <FileText className="w-7 h-7" />
               </div>
-              <div className="space-y-1">
-                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+              <div className="space-y-3">
+                <h3 className="font-bold text-gray-900 text-lg flex items-center gap-3">
                   {value.label}
-                  <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-normal">
+                  <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full font-bold">
                     Interactive
                   </span>
                 </h3>
-                <p className="text-xs text-gray-500 leading-relaxed">
+                <p className="text-sm text-gray-600 leading-relaxed font-medium">
                   {value.description}
                 </p>
               </div>
@@ -261,6 +262,7 @@ export default function ResumeUpload({ onAnalyze, isLoading }: ResumeUploadProps
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }
