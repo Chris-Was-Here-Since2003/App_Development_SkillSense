@@ -12,12 +12,12 @@ export const JobCard: React.FC<JobCardProps> = ({
   analysisResult,
   onViewDetails,
 }) => {
-  // Calculate dynamic match percentage
+  // Calculate pathway fit based on skill overlap
   const getSkillsIntersection = (jobSkills: string[]) => {
     if (!analysisResult) return { intersection: [], percentage: 0 };
     const mySkills = analysisResult.skills.map(s => s.name.toLowerCase());
     
-    // Find skill matches
+    // Find overlapping skills
     const intersection = jobSkills.filter(js => 
       mySkills.some(ms => ms.includes(js.toLowerCase()) || js.toLowerCase().includes(ms))
     );
@@ -49,7 +49,7 @@ export const JobCard: React.FC<JobCardProps> = ({
         <span className={`match-badge text-[11px] font-bold px-2.5 py-1 rounded-full text-white ${
           displayedScore >= 85 ? "bg-emerald-500" : "bg-blue-500"
         }`}>
-          {displayedScore}% Match
+          {displayedScore}% Fit
         </span>
       </div>
 
@@ -67,7 +67,7 @@ export const JobCard: React.FC<JobCardProps> = ({
       {/* Match bar */}
       <div className="match-bar-wrap flex flex-col gap-1">
         <div className="match-bar-label flex justify-between text-[11px] font-semibold text-slate-400">
-          <span>Skills Match</span>
+          <span>Skills Alignment</span>
           <span className="text-emerald-500 font-bold">{displayedScore}%</span>
         </div>
         <div className="match-bar-track h-1.5 bg-slate-100 rounded-full overflow-hidden">

@@ -30,42 +30,6 @@ interface InterviewChatbotProps {
   analysisResult: ResumeAnalysisResult | null;
 }
 
-// Preset tracks for the interview coach
-const PRESET_TRACKS = [
-  {
-    id: "behavioral",
-    name: "Behavioral & STAR Prep",
-    description: "Focus on soft skills, teamwork, and problem solving using Situation, Task, Action, and Result.",
-    icon: HelpCircle,
-    color: "bg-purple-50 text-purple-600 border-purple-100 hover:bg-purple-100/50",
-    initialPrompt: "I want to practice behavioral interview questions. Please start our mock interview by asking me a typical behavioral question, and guide me on how to answer using the STAR method."
-  },
-  {
-    id: "frontend",
-    name: "Frontend Engineering",
-    description: "Practice React, JavaScript, CSS, system design, state management, and modern web architectures.",
-    icon: Sparkles,
-    color: "bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-100/50",
-    initialPrompt: "I am preparing for a Frontend Engineer interview. Please start a mock interview asking technical or conceptual frontend questions one-by-one."
-  },
-  {
-    id: "backend",
-    name: "Backend & Systems",
-    description: "Practice databases, system design, API design, security, scalability, and algorithms.",
-    icon: BookOpen,
-    color: "bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-100/50",
-    initialPrompt: "I am preparing for a Backend & System Design interview. Please start a mock interview asking technical questions about microservices, databases, API design, or scale."
-  },
-  {
-    id: "product",
-    name: "Product & Strategy",
-    description: "Focus on metric analysis, product thinking, strategic prioritization, and stakeholder communication.",
-    icon: Briefcase,
-    color: "bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100/50",
-    initialPrompt: "I am preparing for a Product Manager / Tech Strategy interview. Please start our mock interview asking about product sense, prioritization frameworks, or product launch metrics."
-  }
-];
-
 // Popular tech roles to recommend
 const POPULAR_ROLES = [
   "Frontend Engineer",
@@ -216,18 +180,6 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
     }
   };
 
-  const startTrack = (trackId: string, initialPrompt: string) => {
-    setSelectedTrack(trackId);
-    setMessages([
-      {
-        role: "assistant",
-        content: `Excellent! You've started the **${PRESET_TRACKS.find(t => t.id === trackId)?.name}** track. I will ask questions, evaluate your answers with detailed constructive critiques, and guide you towards high-impact responses. Let's begin!`,
-        timestamp: new Date()
-      }
-    ]);
-    handleSendMessage(initialPrompt);
-  };
-
   const handleResetChat = () => {
     setSelectedTrack(null);
     setMessages([
@@ -242,17 +194,17 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
   };
 
   return (
-    <div className="interview-coach-container bg-white border border-[#E5E7EB] rounded-2xl shadow-lg grid grid-cols-1 lg:grid-cols-5 overflow-hidden h-[calc(100vh-18rem)] min-h-[600px]" id="interview-coach">
+    <div className="interview-coach-container bg-white border border-[#E5E7EB] rounded-2xl shadow-lg grid grid-cols-1 lg:grid-cols-5 overflow-hidden max-h-[78vh]" id="interview-coach">
       
       {/* Left Sidebar: Options & Configs */}
-      <div className="lg:col-span-1 border-r border-[#E5E7EB] bg-slate-50/50 p-6 sm:p-7 lg:p-8 flex flex-col gap-7 sm:gap-9 overflow-y-auto max-h-screen">
+      <div className="lg:col-span-1 border-r border-[#E5E7EB] bg-slate-50/50 p-2.5 sm:p-3 lg:p-4 flex flex-col gap-3 overflow-y-auto max-h-full">
         <div>
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 text-blue-600">💡 Configuration</h3>
-          <p className="text-xs text-slate-600 leading-relaxed mb-6 font-medium">
+          <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 text-blue-600">💡 Configuration</h3>
+          <p className="text-[11px] text-slate-600 leading-relaxed mb-3 font-medium">
             Customize the AI's persona, context, and focus to perfectly simulate your actual upcoming interview.
           </p>
 
-          <div className="space-y-7">
+          <div className="space-y-3">
             {/* Resume Context Option */}
             <div>
               <label className="flex items-start gap-2 cursor-pointer group">
@@ -344,7 +296,7 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
                         })}
                       {getRecommendedRoles().filter(role => role.toLowerCase().includes(customRole.toLowerCase())).length === 0 && (
                         <div className="text-[11px] text-slate-400 italic px-3 py-2">
-                          No matching roles in resume
+                          No roles from your profile matched that search
                         </div>
                       )}
                     </div>
@@ -386,7 +338,7 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
                       !getRecommendedRoles().some(r => r.toLowerCase() === role.toLowerCase())
                     ).length === 0 && (
                       <div className="text-[11px] text-slate-400 italic px-3 py-2">
-                        No matching popular roles
+                        No popular roles found in this list
                       </div>
                     )}
                   </div>
@@ -422,10 +374,10 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
           </div>
         </div>
 
-        <div className="mt-auto border-t border-slate-200 pt-7">
+        <div className="mt-auto border-t border-slate-200 pt-2">
           <button
             onClick={handleResetChat}
-            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl cursor-pointer transition-colors bg-white hover:shadow-md"
+            className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-[11px] rounded-xl cursor-pointer transition-colors bg-white hover:shadow-md"
           >
             <RefreshCw className="w-4 h-4" />
             Reset Practice Session
@@ -437,34 +389,8 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
       <div className="lg:col-span-4 flex flex-col h-full overflow-hidden bg-white">
         
         {/* Chat Messages Port */}
-        <div className="flex-1 overflow-y-auto p-8 sm:p-9 space-y-7 min-h-[350px]">
+        <div className="flex-1 overflow-y-auto p-2.5 sm:p-3 space-y-2.5 min-h-[240px]">
           
-          {/* Preset tracks overlay inside chat if no track is selected yet and conversation is empty/initial */}
-          {!selectedTrack && messages.length === 1 && (
-            <div className="mb-9 grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
-              {PRESET_TRACKS.map((track) => {
-                const IconComponent = track.icon;
-                return (
-                  <button
-                    key={track.id}
-                    onClick={() => startTrack(track.id, track.initialPrompt)}
-                    className={`text-left p-6 rounded-2xl border border-[#E5E7EB] cursor-pointer transition-all hover:scale-[1.02] hover:shadow-xl hover:border-blue-200 flex items-start gap-5 ${track.color}`}
-                  >
-                    <div className="p-3.5 rounded-xl bg-white/80 shrink-0 border border-current/10 shadow-md">
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="text-base font-extrabold text-slate-900 leading-tight">{track.name}</h4>
-                      <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                        {track.description}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
           {messages.map((message, idx) => {
             const isAI = message.role === "assistant";
             return (
@@ -480,7 +406,7 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
                 </div>
 
                 {/* Message Bubble */}
-                <div className={`rounded-2xl p-6 sm:p-7 leading-relaxed text-sm ${
+                <div className={`rounded-2xl p-3 sm:p-4 leading-relaxed text-sm ${
                   isAI 
                     ? "bg-slate-50 border border-slate-100 text-slate-800" 
                     : "bg-blue-600 text-white shadow-md shadow-blue-100"
@@ -546,53 +472,13 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
           )}
 
         </div>
-
-        {/* Action Suggestion Chips above input */}
-        <div className="px-6 py-2 border-t border-slate-100 bg-slate-50/50 flex flex-wrap gap-2">
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider self-center mr-1">Quick prompts:</span>
-          
-          <button
-            onClick={() => handleSendMessage("Ask me a common behavioral interview question.")}
-            disabled={isLoading}
-            className="text-[11px] bg-white hover:bg-blue-50 border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 font-bold py-1 px-2.5 rounded-lg transition-all cursor-pointer"
-          >
-            📋 Get behavioral question
-          </button>
-
-          <button
-            onClick={() => handleSendMessage("What is the STAR method and how can I use it to structure my answers?")}
-            disabled={isLoading}
-            className="text-[11px] bg-white hover:bg-blue-50 border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 font-bold py-1 px-2.5 rounded-lg transition-all cursor-pointer"
-          >
-            🚀 Explain STAR method
-          </button>
-
-          {analysisResult && (
-            <button
-              onClick={() => handleSendMessage("Based on my resume, what are the most likely interview questions recruiters will ask?")}
-              disabled={isLoading}
-              className="text-[11px] bg-white hover:bg-blue-50 border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 font-bold py-1 px-2.5 rounded-lg transition-all cursor-pointer"
-            >
-              📄 Questions for my resume
-            </button>
-          )}
-
-          <button
-            onClick={() => handleSendMessage("Can you give me 3 hard technical questions for system architecture?")}
-            disabled={isLoading}
-            className="text-[11px] bg-white hover:bg-blue-50 border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200 font-bold py-1 px-2.5 rounded-lg transition-all cursor-pointer"
-          >
-            💻 System Arch questions
-          </button>
-        </div>
-
         {/* Input Box Area */}
         <form 
           onSubmit={(e) => {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="p-4 border-t border-[#E5E7EB] bg-white flex gap-3"
+          className="p-2.5 border-t border-[#E5E7EB] bg-white flex gap-2"
         >
           <input
             type="text"
@@ -604,12 +490,12 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
                 ? "Type your answer or practice response here..." 
                 : "Type custom interview question prep requests or chat..."
             }
-            className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium text-sm text-slate-800 placeholder-slate-400"
+            className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium text-sm text-slate-800 placeholder-slate-400"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-xl shadow-md cursor-pointer transition-colors border-0 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold p-2.5 rounded-xl shadow-md cursor-pointer transition-colors border-0 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
             <Send className="w-5 h-5" />
           </button>

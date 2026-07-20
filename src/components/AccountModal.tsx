@@ -102,66 +102,50 @@ export default function AccountModal({ onClose, onLoginSuccess }: AccountModalPr
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto" id="auth-modal">
       <div 
-        className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-4xl w-full overflow-hidden transform transition-all flex flex-col md:flex-row relative"
+        className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-xl w-full max-h-[72vh] md:max-h-[68vh] overflow-hidden transform transition-all flex flex-col md:flex-row relative"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button top right */}
         <button 
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-slate-100 z-50 transition-all cursor-pointer"
+          className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-slate-100 z-50 transition-all cursor-pointer"
           aria-label="Close modal"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4.5 h-4.5" />
         </button>
 
-        {/* LEFT BRAND PANEL (from template) */}
-        <div className="login-brand-panel md:w-1/2 p-10 flex flex-col justify-between text-white relative">
+        {/* LEFT BRAND PANEL */}
+        <div className="login-brand-panel md:w-[42%] p-3 lg:p-4 flex flex-col justify-between text-white relative">
           <div>
-            <div className="brand-logo text-3xl font-extrabold">
+            <div className="brand-logo text-base font-extrabold">
               Skill<span className="text-blue-200">Sense</span>
             </div>
-            <div className="brand-tagline text-xs uppercase tracking-widest opacity-75 mt-1">
-              AI-Powered Job Matching Platform
+            <div className="brand-tagline text-[8px] uppercase tracking-widest opacity-75 mt-1">
+              AI Career Analysis Platform
             </div>
           </div>
 
-          <div className="my-8">
-            <h2 className="brand-headline text-3xl font-bold leading-tight">
-              Find the right job,<br />powered by AI.
+          <div className="my-2">
+            <h2 className="brand-headline text-xs font-semibold leading-tight">
+              Explore your next career path, powered by AI.
             </h2>
-            <p className="brand-desc text-sm opacity-80 mt-4 leading-relaxed max-w-xs">
-              Upload your resume and let our AI engine analyze your skills,
-              match you to top opportunities, and help you land your next role faster.
+            <p className="brand-desc text-[9px] opacity-80 mt-1 leading-relaxed max-w-xs">
+              Upload your resume and let our AI guide your next move.
             </p>
-          </div>
-
-          <div className="brand-stats flex gap-6 border-t border-white/10 pt-6">
-            <div className="stat-item">
-              <span className="stat-number text-2xl font-black text-blue-300">10K+</span>
-              <span className="stat-label text-[10px] uppercase tracking-wider opacity-60">Active Listings</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number text-2xl font-black text-blue-300">95%</span>
-              <span className="stat-label text-[10px] uppercase tracking-wider opacity-60">Accuracy</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number text-2xl font-black text-blue-300">3K+</span>
-              <span className="stat-label text-[10px] uppercase tracking-wider opacity-60">Hired / Mo</span>
-            </div>
           </div>
         </div>
 
         {/* RIGHT FORM PANEL */}
-        <div className="login-form-panel md:w-1/2 p-10 flex flex-col justify-center">
+        <div className="login-form-panel md:w-[58%] p-3 lg:p-4 flex flex-col justify-center">
           {/* Mobile-only logo */}
-          <div className="panel-logo md:hidden text-2xl font-black text-blue-600 mb-4">
+          <div className="panel-logo md:hidden text-sm font-black text-blue-600 mb-2">
             Skill<span className="text-slate-900">Sense</span>
           </div>
 
           {/* Tab Switcher */}
-          <div className="tab-switcher flex border-b-2 border-slate-100 mb-6" role="tablist">
+          <div className="tab-switcher flex border-b-2 border-slate-100 mb-2" role="tablist">
             <button 
-              className={`tab-btn flex-1 py-3 text-sm font-semibold transition-all border-b-2 -mb-[2px] ${
+              className={`tab-btn flex-1 py-2 text-xs font-semibold transition-all border-b-2 -mb-[2px] ${
                 activeTab === "login" 
                   ? "border-blue-600 text-blue-600 font-bold" 
                   : "border-transparent text-slate-400 hover:text-slate-600"
@@ -177,7 +161,7 @@ export default function AccountModal({ onClose, onLoginSuccess }: AccountModalPr
               Login
             </button>
             <button 
-              className={`tab-btn flex-1 py-3 text-sm font-semibold transition-all border-b-2 -mb-[2px] ${
+              className={`tab-btn flex-1 py-2 text-xs font-semibold transition-all border-b-2 -mb-[2px] ${
                 activeTab === "register" 
                   ? "border-blue-600 text-blue-600 font-bold" 
                   : "border-transparent text-slate-400 hover:text-slate-600"
@@ -196,68 +180,68 @@ export default function AccountModal({ onClose, onLoginSuccess }: AccountModalPr
 
           {/* Alerts */}
           {error && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 p-3.5 rounded-xl flex items-start gap-2 text-xs leading-relaxed">
+            <div className="mb-3 bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl flex items-start gap-2 text-xs leading-relaxed">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
               <span>{error}</span>
             </div>
           )}
 
           {success && (
-            <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700 p-3.5 rounded-xl flex items-start gap-2 text-xs leading-relaxed">
+            <div className="mb-3 bg-emerald-50 border border-emerald-200 text-emerald-700 p-3 rounded-xl flex items-start gap-2 text-xs leading-relaxed">
               <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-500" />
               <span>{success}</span>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-2">
             {activeTab === "register" && (
               <div className="form-group flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-700">Full Name</label>
+                <label className="text-[9px] font-bold text-slate-700">Full Name</label>
                 <input
                   type="text"
                   placeholder="Hans Dorego"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-[11px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
                   required
                 />
               </div>
             )}
 
             <div className="form-group flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-700">Email Address</label>
+              <label className="text-[9px] font-bold text-slate-700">Email Address</label>
               <input
                 type="email"
                 placeholder="hans.dorego@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-[11px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
                 required
               />
             </div>
 
             <div className="form-group flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-slate-700">Password</label>
+              <label className="text-[9px] font-bold text-slate-700">Password</label>
               <input
                 type="password"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-[11px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
                 required
               />
             </div>
 
             {activeTab === "register" && (
               <div className="form-group flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-700">Confirm Password</label>
+                <label className="text-[9px] font-bold text-slate-700">Confirm Password</label>
                 <input
                   type="password"
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-[11px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all"
                   required
                 />
               </div>
@@ -266,7 +250,7 @@ export default function AccountModal({ onClose, onLoginSuccess }: AccountModalPr
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-blue-100 hover:shadow-blue-200 transition-all flex items-center justify-center gap-2 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl shadow-md shadow-blue-100 hover:shadow-blue-200 transition-all flex items-center justify-center gap-2 text-[11px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-1"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -284,7 +268,7 @@ export default function AccountModal({ onClose, onLoginSuccess }: AccountModalPr
             </button>
           </form>
 
-          <p className="form-switch-text text-center text-xs text-slate-400 mt-6">
+          <p className="form-switch-text text-center text-[9px] text-slate-400 mt-2">
             {activeTab === "login" ? (
               <>
                 Don't have an account?{" "}

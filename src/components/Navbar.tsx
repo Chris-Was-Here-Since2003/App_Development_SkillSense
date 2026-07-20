@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       const prefix = currentUser.email.split("@")[0];
       return prefix.charAt(0).toUpperCase() + prefix.slice(1);
     }
-    return "Hans"; // Default fallback matching mockup
+    return "John"; // Default fallback matching mockup
   };
 
   return (
@@ -188,47 +188,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
         )}
-
-        {/* Interactive Notifications Button */}
-        <div className="relative">
-          <button 
-            onClick={() => {
-              setShowNotifDropdown(!showNotifDropdown);
-              setShowHistoryDropdown(false);
-            }}
-            className="notif-btn p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors relative cursor-pointer" 
-            aria-label="Notifications"
-          >
-            🔔
-            <span className="notif-badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center">3</span>
-          </button>
-
-          {showNotifDropdown && (
-            <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
-              <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between bg-[#DBEAFE]/30">
-                <span className="text-xs font-bold text-blue-800 uppercase tracking-wider">AI Career Notifications</span>
-                <span className="text-[10px] text-blue-600 font-semibold">Active Alerts</span>
-              </div>
-              <div className="divide-y divide-slate-100">
-                <div className="p-3 hover:bg-slate-50 text-xs text-slate-700 leading-relaxed">
-                  <p className="font-semibold text-slate-900 mb-0.5">🤖 AI Match Alert</p>
-                  Google Philippines updated requirements for <span className="font-bold text-blue-600">Data Analyst</span>. Your score is now 92%!
-                  <span className="block text-[10px] text-slate-400 mt-1">2 hours ago</span>
-                </div>
-                <div className="p-3 hover:bg-slate-50 text-xs text-slate-700 leading-relaxed">
-                  <p className="font-semibold text-slate-900 mb-0.5">📈 Labor Market Trend</p>
-                  Python and AWS skills are seeing a <span className="font-bold text-emerald-600">15% demand surge</span> in Metro Cebu.
-                  <span className="block text-[10px] text-slate-400 mt-1">5 hours ago</span>
-                </div>
-                <div className="p-3 hover:bg-slate-50 text-xs text-slate-700 leading-relaxed">
-                  <p className="font-semibold text-slate-900 mb-0.5">💼 Recruiter Screening</p>
-                  <span className="font-bold text-purple-600">CreativeHub Co.</span> viewed your profile and requested scheduling details.
-                  <span className="block text-[10px] text-slate-400 mt-1">1 day ago</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
 
         {/* User Account / Avatar Widget */}
         {currentUser ? (
