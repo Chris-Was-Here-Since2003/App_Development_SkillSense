@@ -303,7 +303,7 @@ const RESUME_ANALYSIS_SCHEMA = {
         outlookSummary: { type: Type.STRING, description: "A detailed narrative of future career growth outlook" },
         pathways: {
           type: Type.ARRAY,
-          description: "An array of 2 to 5 distinct, highly customized alternative career pathways suited for this candidate (e.g. Expert Specialist, Tech Leadership, Product Management, Entrepreneur/Consultant)",
+          description: "An array of 3 to 5 distinct, highly customized alternative career pathways suited for this candidate (e.g. Expert Specialist, Tech Leadership, Product Management, Entrepreneur/Consultant)",
           items: {
             type: Type.OBJECT,
             properties: {
@@ -423,7 +423,7 @@ app.post("/api/analyze-resume", async (req, res) => {
 
       Make sure to:
       1. Parse all standard fields: work experience, education, skills, certifications, projects, and achievements. Ensure values are accurate to the input.
-      2. Predict multiple alternative career pathways (minimum of 2, maximum of 5, e.g. Technical Specialist track, Management/Leadership track, Product/Strategy hybrid track, and Entrepreneurship/Consulting track). Each pathway must have a clear title, description of its focus, and exactly 3 sequential future roles over 1-2 years (short term), 3-4 years (mid term), and 5+ years (long term). Describe each role, transition difficulty, market demand, and skills to acquire.
+      2. Predict multiple alternative career pathways (minimum of 3, maximum of 5, e.g. Technical Specialist track, Management/Leadership track, Product/Strategy hybrid track, and Entrepreneurship/Consulting track). Each pathway must have a clear title, description of its focus, and exactly 3 sequential future roles over 1-2 years (short term), 3-4 years (mid term), and 5+ years (long term). Describe each role, transition difficulty, market demand, and skills to acquire.
       3. Categorize key technical and soft skills into a skills heat map with explicit proficiency ratings (1 to 100), descriptions of strength, and a detailed justification of why that specific score (1 to 100) was given based on their years of experience, projects, or level of responsibility shown in the resume.
       4. Compute a competitiveness score (0 to 100) for three specific epochs:
          - 5 Years Ago (circa 2021)
@@ -457,7 +457,7 @@ app.post("/api/analyze-resume", async (req, res) => {
 
     // Call the model (we use gemini-2.5-flash as the default reliable model)
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite",
+      model: "gemini-2.5-flash",
       contents: contents,
       config: {
         responseMimeType: "application/json",
@@ -597,7 +597,7 @@ CRITICAL INSTRUCTIONS:
     }));
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite",
+      model: "gemini-3.5-flash",
       contents: contents,
       config: {
         systemInstruction: systemInstruction,
@@ -647,7 +647,7 @@ app.post("/api/generate-resume-from-chat", async (req, res) => {
     const contents = `${prompt}\n\nChat Conversation History:\n${chatContent}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite",
+      model: "gemini-2.5-flash",
       contents: contents,
       config: {
         responseMimeType: "application/json",
@@ -709,7 +709,7 @@ CRITICAL INSTRUCTIONS:
     }));
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite",
+      model: "gemini-3.5-flash",
       contents: contents,
       config: {
         systemInstruction: systemInstruction,
