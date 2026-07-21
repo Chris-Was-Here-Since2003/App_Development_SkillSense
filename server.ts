@@ -190,16 +190,34 @@ app.delete("/api/resumes/:id", async (req, res) => {
 
 // Lazy initializer for Google GenAI client
 let aiClient: GoogleGenAI | null = null;
+function getGeminiApiKey(): string | undefined {
+  const vercelApiKey = process.env.GEMINI_API_KEY?.trim();
+  if (vercelApiKey && vercelApiKey !== "MY_GEMINI_API_KEY") {
+    return vercelApiKey;
+  }
+
+  const envPath = path.resolve(process.cwd(), ".env");
+  if (fs.existsSync(envPath)) {
+    const parsedEnv = dotenv.parse(fs.readFileSync(envPath, "utf8"));
+    const localApiKey = parsedEnv.GEMINI_API_KEY?.trim();
+    if (localApiKey && localApiKey !== "MY_GEMINI_API_KEY") {
+      return localApiKey;
+    }
+  }
+
+  return undefined;
+}
+
 function getGenAI(): GoogleGenAI {
   if (!aiClient) {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || apiKey === "MY_GEMINI_API_KEY") {
+    const apiKey = getGeminiApiKey();
+    if (!apiKey) {
       throw new Error(
-        "GEMINI_API_KEY environment variable is not configured. Please add your Gemini API Key in the Settings > Secrets panel in the AI Studio UI."
+        "GEMINI_API_KEY is not configured. Please add it in Vercel environment variables or in the local .env file."
       );
     }
     aiClient = new GoogleGenAI({
-      apiKey: apiKey,
+      apiKey,
       httpOptions: {
         headers: {
           "User-Agent": "aistudio-build",
@@ -580,7 +598,8 @@ CRITICAL INSTRUCTIONS:
    - Topic 4: Work experience (roles, companies, durations, and key achievements/responsibilities).
    - Topic 5: Education and Certifications.
    - Topic 6: Projects (title, technologies used, and description).
-3. Do not show them a giant questionnaire or dump all questions at once. Ask one focused question, wait for their reply, provide brief positive validation/enhancement, and ask the next.
+3. Do not show them a g
+iant questionnaire or dump all questions at once. Ask one focused question, wait for their reply, provide brief positive validation/enhancement, and ask the next.
 4. When they provide a basic description of their work tasks, suggest how to rephrase them into high-impact accomplishment bullets using strong action verbs (e.g. 'Led', 'Optimized', 'Designed', 'Architected') and measurable results where possible.
 5. If they already have an active resume draft loaded, offer to rewrite sections, add specific tailored experience, optimize for ATS keywords, or suggest layout strategies.
 6. Keep your responses crisp, professional, and well-structured with markdown. Include a progress indicator at the end of your replies (e.g., "[Progress: Contact Info 1/5]" or "[Progress: Polishing 5/5]") to help them feel the momentum!
