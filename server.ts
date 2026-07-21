@@ -209,14 +209,13 @@ function getGeminiApiKey(): string | undefined {
   return undefined;
 }
 
-function getGenAI(): GoogleGenAI {
+function getGenAI(): GoogleGenAI | null {
+  const apiKey = getGeminiApiKey();
+  if (!apiKey) {
+    return null;
+  }
+
   if (!aiClient) {
-    const apiKey = getGeminiApiKey();
-    if (!apiKey) {
-      throw new Error(
-        "GEMINI_API_KEY is not configured. Please add it in Vercel environment variables or in the local .env file."
-      );
-    }
     aiClient = new GoogleGenAI({
       apiKey,
       httpOptions: {
@@ -227,6 +226,10 @@ function getGenAI(): GoogleGenAI {
     });
   }
   return aiClient;
+}
+
+function getPreferredModel(): string {
+  return process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
 }
 
 // Structured schema for detailed resume analysis and career prediction
@@ -435,6 +438,11 @@ app.post("/api/analyze-resume", async (req, res) => {
     }
 
     const ai = getGenAI();
+    if (!ai) {
+      return res.status(503).json({
+        error: "AI analysis is unavailable because GEMINI_API_KEY is not configured yet. Add it to Vercel environment variables or your local .env file."
+      });
+    }
 
     let prompt = `
       You are an expert technical recruiter, executive career coach, and labor market economist.
@@ -474,9 +482,9 @@ app.post("/api/analyze-resume", async (req, res) => {
       contents = `${prompt}\n\nResume Text:\n${textData}`;
     }
 
-    // Call the model (we use gemini-2.5-flash as the default reliable model)
+    // Call the model using the configured preferred model
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: getPreferredModel(),
       contents: contents,
       config: {
         responseMimeType: "application/json",
@@ -494,7 +502,8 @@ app.post("/api/analyze-resume", async (req, res) => {
     res.json(parsedData);
   } catch (error: any) {
     console.error("Error analyzing resume:", error);
-    res.status(500).json({
+    const isServiceError = /api key|authentication|permission|not configured|model|quota|429|404/i.test(error.message || "");
+    res.status(isServiceError ? 503 : 500).json({
       error: error.message || "An internal error occurred during resume analysis.",
     });
   }
@@ -586,6 +595,11 @@ app.post("/api/chat-resume-builder", async (req, res) => {
     }
 
     const ai = getGenAI();
+    if (!ai) {
+      return res.status(503).json({
+        error: "AI resume chat is unavailable because GEMINI_API_KEY is not configured yet. Add it to Vercel environment variables or your local .env file."
+      });
+    }
 
     let systemInstruction = `You are a highly skilled AI Resume Consultant and Professional Writer named SkillSense Resume Specialist.
 Your mission is to help the user build or refine a spectacular, professional resume that showcases their skills and experience.
@@ -617,7 +631,7 @@ iant questionnaire or dump all questions at once. Ask one focused question, wait
     }));
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: getPreferredModel(),
       contents: contents,
       config: {
         systemInstruction: systemInstruction,
@@ -629,7 +643,8 @@ iant questionnaire or dump all questions at once. Ask one focused question, wait
     res.json({ reply });
   } catch (error: any) {
     console.error("Resume builder chat error:", error);
-    res.status(500).json({
+    const isServiceError = /api key|authentication|permission|not configured|model|quota|429|404/i.test(error.message || "");
+    res.status(isServiceError ? 503 : 500).json({
       error: error.message || "Failed to communicate with AI Resume Specialist.",
     });
   }
@@ -644,6 +659,11 @@ app.post("/api/generate-resume-from-chat", async (req, res) => {
     }
 
     const ai = getGenAI();
+    if (!ai) {
+      return res.status(503).json({
+        error: "AI resume generation is unavailable because GEMINI_API_KEY is not configured yet. Add it to Vercel environment variables or your local .env file."
+      });
+    }
 
     let prompt = `
       You are an expert executive resume writer.
@@ -667,7 +687,7 @@ app.post("/api/generate-resume-from-chat", async (req, res) => {
     const contents = `${prompt}\n\nChat Conversation History:\n${chatContent}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: getPreferredModel(),
       contents: contents,
       config: {
         responseMimeType: "application/json",
@@ -685,7 +705,8 @@ app.post("/api/generate-resume-from-chat", async (req, res) => {
     res.json(parsedResume);
   } catch (error: any) {
     console.error("Resume generation error:", error);
-    res.status(500).json({
+    const isServiceError = /api key|authentication|permission|not configured|model|quota|429|404/i.test(error.message || "");
+    res.status(isServiceError ? 503 : 500).json({
       error: error.message || "Failed to compile structured resume. Please try again.",
     });
   }
@@ -700,6 +721,11 @@ app.post("/api/chat-interview", async (req, res) => {
     }
 
     const ai = getGenAI();
+    if (!ai) {
+      return res.status(503).json({
+        error: "AI interview coaching is unavailable because GEMINI_API_KEY is not configured yet. Add it to Vercel environment variables or your local .env file."
+      });
+    }
 
     // Construct a rich system instruction to guide the interview coach
     let systemInstruction = `You are an expert AI Interview Coach named SkillSense Interview Coach.
@@ -729,7 +755,7 @@ CRITICAL INSTRUCTIONS:
     }));
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: getPreferredModel(),
       contents: contents,
       config: {
         systemInstruction: systemInstruction,
@@ -741,7 +767,8 @@ CRITICAL INSTRUCTIONS:
     res.json({ reply });
   } catch (error: any) {
     console.error("Chatbot API error:", error);
-    res.status(500).json({
+    const isServiceError = /api key|authentication|permission|not configured|model|quota|429|404/i.test(error.message || "");
+    res.status(isServiceError ? 503 : 500).json({
       error: error.message || "Failed to communicate with AI Interview Coach.",
     });
   }
