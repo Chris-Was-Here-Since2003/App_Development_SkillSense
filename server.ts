@@ -7,11 +7,12 @@ import dotenv from "dotenv";
 import { sqlGet, sqlAll, sqlRun } from "./serverDb";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
+import { pathToFileURL } from "url";
 
 dotenv.config();
 
-const app = express();
-const PORT = 3000;
+export const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Increase request size limit for handling base64 PDFs and images
 app.use(express.json({ limit: "15mb" }));
@@ -785,4 +786,9 @@ async function startServer() {
   });
 }
 
-startServer();
+const isMainModule = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMainModule) {
+  startServer();
+}
+
+export default app;
