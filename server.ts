@@ -450,7 +450,7 @@ app.post("/api/analyze-resume", async (req, res) => {
 
       Make sure to:
       1. Parse all standard fields: work experience, education, skills, certifications, projects, and achievements. Ensure values are accurate to the input.
-      2. Predict multiple alternative career pathways (minimum of 3, maximum of 5, e.g. Technical Specialist track, Management/Leadership track, Product/Strategy hybrid track, and Entrepreneurship/Consulting track). Each pathway must have a clear title, description of its focus, and exactly 3 sequential future roles over 1-2 years (short term), 3-4 years (mid term), and 5+ years (long term). Describe each role, transition difficulty, market demand, and skills to acquire.
+      2. Predict multiple alternative career pathways (minimum of 3, maximum of 5, always add possible tracks that can be suplemmented by 1 or 2 skills not available in the resume). e.g. Technical Specialist track, Management/Leadership track, Product/Strategy hybrid track, and Entrepreneurship/Consulting track). Each pathway must have a clear title, description of its focus, and exactly 3 sequential future roles over 1-2 years (short term), 3-4 years (mid term), and 5+ years (long term). Describe each role, transition difficulty, market demand, and skills to acquire.
       3. Categorize key technical and soft skills into a skills heat map with explicit proficiency ratings (1 to 100), descriptions of strength, and a detailed justification of why that specific score (1 to 100) was given based on their years of experience, projects, or level of responsibility shown in the resume.
       4. Compute a competitiveness score (0 to 100) for three specific epochs:
          - 5 Years Ago (circa 2021)
@@ -808,9 +808,6 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
 }
 
 const isMainModule = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
