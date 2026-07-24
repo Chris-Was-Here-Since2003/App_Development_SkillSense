@@ -51,7 +51,7 @@ export const InterviewChatbot: React.FC<InterviewChatbotProps> = ({ analysisResu
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hello! I am your **SkillSense AI Interview Coach**. 🤖\n\nI can help you ace your upcoming interviews! Choose one of the core practice tracks below, or let's start a custom session tailored to your profile.",
+      content: "Hello! I am your **SkillSense AI Interview Coach**. 🤖\n\nI can help you ace your upcoming interviews! State what questions you would like so we can start!.",
       timestamp: new Date()
     }
   ]);
